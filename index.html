@@ -1,0 +1,229 @@
+<title>個人店 伸びたリール解剖</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: 縦一列の読み物。結論 → 9店の比較(表+対数チャート) → 1本ずつの解剖 → 伸びない例 → 型 → 真似の手順 */
+:root{
+  --bg:#f7f6f3; --surface:#ffffff; --ink:#1f2128; --muted:#5f6370; --line:#e2e0da;
+  --ai:#2f5d4e;        /* 深緑: のれんの色 */
+  --karashi:#c9921e;
+  --warn:#b4432f; --warn-bg:#fbede9;
+  --gray-bg:#efeeea;
+  --f-display:"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;
+  --f-body:"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;
+  --f-num:"Noto Sans JP","Hiragino Sans",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#131614; --surface:#1b1f1d; --ink:#e8eae6; --muted:#9da39f; --line:#2d3330;
+  --ai:#82c4ad; --karashi:#e2b54e; --warn:#f08a74; --warn-bg:#3a2420; --gray-bg:#222724; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#131614; --surface:#1b1f1d; --ink:#e8eae6; --muted:#9da39f; --line:#2d3330;
+  --ai:#82c4ad; --karashi:#e2b54e; --warn:#f08a74; --warn-bg:#3a2420; --gray-bg:#222724; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16.5px;line-height:1.9;letter-spacing:.02em;-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding-block:40px 72px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:56px}
+h1,h2{font-family:var(--f-display);font-weight:900;text-wrap:balance;line-height:1.35;margin:0}
+h1{font-size:clamp(28px,5vw,40px)}
+h2{font-size:22px;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+h2 small{font-family:var(--f-num);font-size:13px;color:var(--ai);letter-spacing:.08em}
+h3{font-size:18px;font-weight:700;margin:0;line-height:1.5}
+p{margin:0}
+.eyebrow{font-family:var(--f-num);font-size:13px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+.lede{color:var(--muted);max-width:62ch}
+section{display:flex;flex-direction:column;gap:18px}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
+.points{display:grid;gap:14px;counter-reset:p;padding:0;margin:0;list-style:none}
+.points li{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start}
+.points li::before{counter-increment:p;content:counter(p);font-family:var(--f-display);color:var(--surface);background:var(--ai);width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:15px;margin-top:2px}
+.points b{color:var(--ai)}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:15px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{font-weight:500;color:var(--muted);font-size:13.5px}
+tr:last-child td{border-bottom:0}
+td.note{text-align:left;white-space:normal;color:var(--muted);font-size:14px;min-width:150px}
+.acct{font-family:var(--f-num);font-size:13px;color:var(--muted)}
+.chip{display:inline-block;font-size:12.5px;padding:1px 8px;border-radius:99px;border:1px solid currentColor;line-height:1.6}
+.chip.warn{color:var(--warn)} .chip.ok{color:var(--ai)} .chip.flat{color:var(--muted)}
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;overflow-x:auto}
+.chart svg{display:block;width:100%;min-width:520px;height:auto}
+.caption{font-size:14px;color:var(--muted)}
+.reels{display:grid;gap:16px}
+.reel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 20px;display:grid;gap:12px}
+.reel.special{border-color:var(--warn);background:var(--warn-bg)}
+.reel.flat{background:var(--gray-bg)}
+.reel-head{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;justify-content:space-between}
+.meta{font-family:var(--f-num);font-size:13.5px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;border-block:1px dashed var(--line);padding-block:10px}
+.stat{display:flex;flex-direction:column;min-width:0}
+.stat span{font-size:12.5px;color:var(--muted);letter-spacing:.04em}
+.stat strong{font-family:var(--f-num);font-weight:500;font-size:15px}
+.stat.hl strong{color:var(--ai)}
+@media (max-width:520px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.why{display:grid;gap:6px;padding-left:1.1em;margin:0}
+.tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.tag{font-size:13px;padding:2px 10px;border-radius:99px;background:color-mix(in srgb,var(--karashi) 18%,transparent);color:var(--ink)}
+.types{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.type{border-top:3px solid var(--ai);padding-top:10px;display:grid;gap:6px;align-content:start}
+.type .ex{font-size:14px;color:var(--muted)}
+.type.no{border-top-color:var(--muted)}
+.compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.compare div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;gap:6px}
+.compare h3{font-size:15px;color:var(--muted)}
+.todo{display:grid;gap:10px;padding:0;margin:0;list-style:none}
+.todo li{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.todo b{display:block}
+.method{font-size:14.5px;color:var(--muted);display:grid;gap:6px;padding-left:1.1em;margin:0}
+a{color:var(--ai)}
+a:focus-visible{outline:2px solid var(--ai);outline-offset:2px}
+</style>
+
+<div class="wrap">
+
+<header style="display:grid;gap:14px">
+  <div class="eyebrow">Instagram リール調査 · 個人店編 · 2026年11月9日時点</div>
+  <h1>フォロワー数千人の個人店が、<br>10万回届いたリールを解剖する</h1>
+  <p class="lede">町中華、つけ麺屋、立ち飲み、うどん屋、パン屋など、個人や数店舗規模の飲食店9つの公式アカウントを調べました。各店の「いつもの再生数」から大きく跳ねたリールを開いて、何が違ったのかを見ています。比較のため、伸びていない店のリールも1本入れました。</p>
+</header>
+
+<section>
+  <h2><small>SUMMARY</small>先に結論</h2>
+  <ol class="points">
+    <li><p><b>個人店の一番の武器は「共同投稿」でした。</b>荒川STANDの上位2本はどちらも店主の個人アカウントとの共同投稿で、丘の上のパン屋の最高も他アカウントとの共同投稿でした。自分のフォロワーが少なくても、相手のフォロワーに届きます。</p></li>
+    <li><p><b>「知ってた?」の一言と、とろける手元で、フォロワーの10倍以上に届く。</b>つけ麺屋の「250円で更に楽しめるの知ってた?」は8.3万回(フォロワーの11倍)。町中華の、卵あんをご飯にかける手元の動画は1.8万回(フォロワーの17倍)でした。</p></li>
+    <li><p><b>文字だけのお知らせ画像は、ほぼ伸びない。</b>営業日のお知らせを画像にしたリールは、いいね19件でした。お知らせは、料理や人が動く映像に乗せた方が届きます。</p></li>
+  </ol>
+</section>
+
+<section>
+  <h2><small>OVERVIEW</small>9店の比較</h2>
+  <p class="lede">「いつもの再生数」は、リール一覧の直近約16本の中央値です。「跳ね幅」は最高再生数がその何倍か、「フォロワー比」は最高再生数がフォロワー数の何倍かを表します。</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>お店</th><th>フォロワー</th><th>いつもの再生数</th><th>最高再生数</th><th>跳ね幅</th><th>フォロワー比</th><th>メモ</th></tr></thead>
+    <tbody id="acct-rows"></tbody>
+  </table>
+  </div>
+  <div class="chart" role="img" aria-label="お店別、最高再生数がいつもの何倍だったか(対数目盛)">
+    <svg id="mult" viewBox="0 0 640 360"></svg>
+  </div>
+  <p class="caption">横軸は対数目盛です(1倍、10倍、100倍が等間隔)。うどん屋仁の114倍は、お店の火事を撮った動画によるもので、狙って再現できるものではありません。</p>
+</section>
+
+<section>
+  <h2><small>CASES</small>伸びたリール、一本ずつ</h2>
+  <p class="lede">いいね率は「いいね数÷再生数」です。個人店のリールは0.2〜2%と、大手チェーン(1〜4%)より低めでした。再生のほとんどがフォロワー以外からで、知らない店の動画にはいいねまでしない人が多いためと考えられます。</p>
+  <div class="reels" id="reels"></div>
+</section>
+
+<section>
+  <h2><small>PATTERNS</small>個人店で伸びた「型」</h2>
+  <div class="types">
+    <div class="type"><h3>共同投稿で、他人のフォロワーに乗る</h3><p>投稿するときに相手を「共同投稿者」に招待すると、両方のフォロワーに表示されます。店主の個人アカウント、常連のインフルエンサー、取引先などが相手になります。</p><p class="ex">荒川STAND 9.9万回・7.6万回 / うどん屋仁 再開 6.9万回 / 丘の上のパン屋 2.9万回</p></div>
+    <div class="type"><h3>「知ってた?」で得する情報を出す</h3><p>替え玉、裏メニュー、トッピングなど、知っている人だけ得する話を、問いかけのテロップで始める。最後まで見て答えを知りたくなります。</p><p class="ex">時しらず「250円で更に楽しめるの知ってた?」8.3万回</p></div>
+    <div class="type"><h3>とろける手元と、流行りの曲</h3><p>チーズ、卵あん、麻婆などが流れ落ちる瞬間を、寄りで撮る。そこに今はやっている曲を合わせると、おすすめに乗りやすくなります。</p><p class="ex">さしろく 1.8万回 / 時しらず 土鍋麻婆麺 6.3万回</p></div>
+    <div class="type"><h3>お店の物語を続けて見せる</h3><p>うどん屋仁は、火事のあとに「復活への道」として、キッチンカーでの営業やペンキ塗りのボランティア募集を発信し続けました。再開の日は、地元の人が共同投稿で祝っています。</p><p class="ex">うどん屋仁 再建の様子 10.3万回 / 再開 6.9万回(投稿4日目)</p></div>
+    <div class="type no"><h3>伸びない型: 文字だけのお知らせ</h3><p>営業日や予約方法を画像にまとめたリールは、どの店でも数百回どまりでした。動きがなく、知らない人が見ても止まる理由がありません。</p><p class="ex">平林食堂のお知らせ いいね19件</p></div>
+  </div>
+</section>
+
+<section>
+  <h2><small>VS CHAINS</small>大手チェーンとの違い</h2>
+  <div class="compare">
+    <div><h3>大手チェーン</h3><p>コラボ相手はアーティストや有名ブランド。いいね率は1〜4%で、ファンが応援の気持ちで反応している。</p></div>
+    <div><h3>個人店</h3><p>コラボ相手は店主本人、常連、地元の人。いいね率は0.2〜2%で、見ているのはほぼ初めてお店を知る人。1本で予約が埋まるほどではなくても、「お店を知ってもらう入口」として働いている。</p></div>
+  </div>
+</section>
+
+<section>
+  <h2><small>NEXT STEP</small>明日から真似するなら</h2>
+  <ul class="todo">
+    <li><b>① 店主の個人アカウントを作り、お店の投稿に共同投稿者として入れる</b>一番お金がかからず、すぐできる方法です。常連さんやご近所のお店に頼むのも効果があります。</li>
+    <li><b>② 「知ってた?」で始まるテロップを1本作る</b>替え玉、追い飯、量の増やし方など、お客さんがよく聞いてくることがネタになります。</li>
+    <li><b>③ とろける・湯気が立つ瞬間を、スマホで寄って10秒撮る</b>曲は、リールの作成画面で「おすすめ」や上昇中になっているものを選びます。</li>
+    <li><b>④ お知らせは画像にせず、料理の動画の上に文字で重ねる</b>営業日や予約方法は、キャプションの下の方にまとめれば十分です。</li>
+  </ul>
+</section>
+
+<section>
+  <h2><small>METHOD</small>調べ方と、わかっていないこと</h2>
+  <ul class="method">
+    <li>Instagramの検索(町中華、定食屋、大衆酒場、ラーメン屋、パン屋など)と、リール活用事例を紹介している記事から候補を選び、Chromeで公式プロフィールを開いて再生数を読み取りました。全国からの無作為な抽出ではないので、偏りがあります。</li>
+    <li>伸びたリールだけを開いて、いいね・コメント・リポスト・シェアの数とキャプションを確認しました。いいね数を非表示にしている投稿や、コメント欄が閉じている投稿もあり、一部の数字は取れていません。</li>
+    <li>共同投稿は、相手のアカウント側の再生も合算されて表示されている可能性があります。広告として配信されたかどうかは、画面からはわかりません。</li>
+    <li>パン屋ザクロ、さかな商店、大衆酒場チャチャチャ、平林食堂は大きく跳ねたリールがなかったため、個別の解剖は平林食堂の1本だけにしています。</li>
+  </ul>
+</section>
+
+</div>
+
+<script>
+const fmtN=v=>v>=10000?(Math.round(v/1000)/10)+'万':v.toLocaleString('ja-JP');
+const accts=[
+  {n:"うどん屋仁",id:"udonya_jin",area:"福岡・鞍手",f:7271,med:30000,top:3424000,note:'<span class="chip warn">火事の動画</span>'},
+  {n:"麺也 時しらず",id:"tokishirazu_menya",area:"東京・大井町",f:7287,med:2800,top:83000,note:'<span class="chip ok">「知ってた?」</span>'},
+  {n:"立ち飲みワイン 荒川STAND",id:"arakawa_stand",area:"東京・日暮里",f:6192,med:7300,top:99000,note:'<span class="chip ok">共同投稿</span>'},
+  {n:"町中華 さしろく",id:"_sashiroku_346",area:"東京・五反田",f:1077,med:1410,top:18000,note:'<span class="chip ok">とろける手元</span> リール5本のみ'},
+  {n:"丘の上のパン屋",id:"okanouenopanya",area:"神奈川・横浜",f:56000,med:5300,top:29000,note:'<span class="chip ok">共同投稿</span>'},
+  {n:"大衆酒場チャチャチャ",id:"chachacha_tokyo",area:"東京・丸の内",f:308,med:475,top:2260,note:'<span class="chip flat">大きな跳ねなし</span>'},
+  {n:"立ち飲み家 さかな商店",id:"sakanashoten",area:"—",f:886,med:3700,top:11000,note:'<span class="chip flat">大きな跳ねなし</span> 最近の投稿は少なめ'},
+  {n:"平林食堂",id:"hirabayashi_shokudo",area:"東京・大田区",f:439,med:550,top:1477,note:'<span class="chip flat">大きな跳ねなし</span>'},
+  {n:"パン屋ザクロ",id:"zacro152",area:"神奈川・横須賀",f:8125,med:7100,top:12000,note:'<span class="chip flat">安定型</span> 毎回7千前後'}
+];
+document.getElementById('acct-rows').innerHTML=accts.map(a=>{
+  const m=a.top/a.med, fr=a.top/a.f;
+  const r=v=>v>=10?Math.round(v):Math.round(v*10)/10;
+  return `<tr><td>${a.n}<br><span class="acct">@${a.id} · ${a.area}</span></td><td class="num">${fmtN(a.f)}</td><td class="num">約${fmtN(a.med)}</td><td class="num">${fmtN(a.top)}</td><td class="num"><b>${r(m)}倍</b></td><td class="num">${r(fr)}倍</td><td class="note">${a.note}</td></tr>`}).join('');
+
+(function(){
+  const svg=document.getElementById('mult'), ns='http://www.w3.org/2000/svg';
+  const data=accts.map(a=>({n:a.n,m:a.top/a.med,id:a.id})).sort((a,b)=>b.m-a.m);
+  const L=170,R=600,T=20,rowH=34,hi=Math.log10(200);
+  const x=v=>L+Math.log10(v)/hi*(R-L);
+  const el=(t,at,txt)=>{const e=document.createElementNS(ns,t);for(const k in at)e.setAttribute(k,at[k]);if(txt!=null)e.textContent=txt;svg.appendChild(e);return e};
+  const H=T+data.length*rowH+30; svg.setAttribute('viewBox',`0 0 640 ${H}`);
+  [1,2,5,10,20,50,100,200].forEach(t=>{
+    el('line',{x1:x(t),x2:x(t),y1:T-6,y2:T+data.length*rowH,stroke:'var(--line)','stroke-width':t===1||t===10||t===100?1.2:.6});
+    el('text',{x:x(t),y:T+data.length*rowH+18,'text-anchor':'middle','font-size':12,fill:'var(--muted)','font-family':'Noto Sans JP, sans-serif'},t+'倍');
+  });
+  data.forEach((d,i)=>{
+    const y=T+i*rowH;
+    const col=d.id==='udonya_jin'?'var(--warn)':(d.m>=5?'var(--ai)':'var(--muted)');
+    el('text',{x:L-10,y:y+rowH/2+4,'text-anchor':'end','font-size':13.5,fill:'var(--ink)'},d.n.length>11?d.n.replace('立ち飲みワイン ','').replace('立ち飲み家 ',''):d.n);
+    el('rect',{x:L,y:y+7,width:Math.max(2,x(d.m)-L),height:rowH-14,rx:3,fill:col,opacity:d.id==='udonya_jin'?.6:.9});
+    const lbl=(d.m>=10?Math.round(d.m):d.m.toFixed(1))+'倍';
+    const inside=x(d.m)>R-40;
+    el('text',{x:inside?x(d.m)-6:x(d.m)+6,y:y+rowH/2+4,'text-anchor':inside?'end':'start','font-size':13,fill:inside?'var(--surface)':'var(--ink)','font-family':'Noto Sans JP, sans-serif'},lbl);
+  });
+})();
+
+const reels=[
+  {cls:"",t:"「250円で更に楽しめるの知ってた?」二度麺",a:"麺也 時しらず",d:"2026年9月18日",url:"https://www.instagram.com/tokishirazu_menya/reel/Dda2UO9ykz5/",v:"8.3万",l:"437",lr:"0.5%",fr:"11倍",
+   why:["ラーメンやつけ麺のあとに、追加の麺(並250円、大350円)を頼める「二度麺」の紹介。","縦書きのテロップで「知ってた?」と問いかけ、麺を入れる手元を見せる。答えが気になって最後まで見てしまう作り。","1行目は「頼まないと後悔⁉️」。損したくない気持ちに訴えている。"],tags:["知ってた?","手元"]},
+  {cls:"",t:"店主アカウントとの共同投稿、週末の満席の店内",a:"荒川STAND",d:"2026年1月11日",url:"https://www.instagram.com/arakawa_stand/reel/DTWvwoZEgNC/",v:"9.9万",l:"371",lr:"0.4%",fr:"16倍",
+   why:["投稿したのは店主の個人アカウントで、お店の公式は共同投稿者。両方のフォロワーに届いている。","立ち飲みで人がぎっしりの店内を、そのまま撮っただけ。「にぎわっている店」が一目で伝わる。","音源はLE SSERAFIMの流行り曲。おすすめに乗りやすい。"],tags:["共同投稿","にぎわい","流行りの曲"]},
+  {cls:"",t:"スタッフ研修のあと、みんなで乾杯",a:"荒川STAND",d:"2025年11月19日",url:"https://www.instagram.com/arakawa_stand/reel/DROxjtmkn59/",v:"7.6万",l:"231",lr:"0.3%",fr:"12倍",
+   why:["これも店主の個人アカウントとの共同投稿。料理は映っておらず、スタッフが缶を持って笑っている数秒の動画。","「地域に愛される安心安全なお店づくり」がテーマの研修だった、と添えている。働く人の雰囲気が伝わる。","音源はTylaの流行り曲。"],tags:["共同投稿","スタッフ","流行りの曲"]},
+  {cls:"",t:"とろとろの卵あんを、ご飯にかける手元",a:"町中華 さしろく",d:"2026年5月22日",url:"https://www.instagram.com/_sashiroku_346/reel/DYoKnM1pwrj/",v:"1.8万",l:"321",lr:"1.8%",fr:"17倍",
+   why:["お玉で黄色い卵あんを丼にかける瞬間を、真上から寄って撮っている。説明なしで「おいしそう」が伝わる。","フォロワー1,077人に対して1.8万回。今回の個人店の中で、フォロワー比が2番目に高い。","キャプションは2行だけ。「ふらっと寄れる町中華」と、日本酒が合うことだけを伝えている。"],tags:["とろける手元","流行りの曲"]},
+  {cls:"",t:"「年内ラストの」土鍋麻婆麺、チーズのせ",a:"麺也 時しらず",d:"2026年10月29日",url:"https://www.instagram.com/tokishirazu_menya/reel/DfEtT-YJlvM/",v:"6.3万",l:"245",lr:"0.4%",fr:"9倍",
+   why:["季節限定の麻婆麺。チーズと麻婆をご飯にのせる瞬間を寄りで撮っている。","テロップは「年内ラストの」。今しか食べられないと伝えている。","音源はAyumu Imazu「結び」。"],tags:["とろける手元","期間限定","流行りの曲"]},
+  {cls:"",t:"地元の人が共同投稿で祝った、お店の再開",a:"うどん屋仁",d:"2026年11月5日",url:"https://www.instagram.com/udonya_jin/reel/DfWu3jzzlnU/",v:"6.9万",l:"非表示",lr:"—",fr:"9倍",
+   why:["火事から9か月、店舗営業の再開を、地元のインスタグラマーが共同投稿で紹介した。","店主が両手を広げて笑う姿に「遂に店舗営業再開!」のテロップ。","キャプションは、火事からキッチンカー営業を経て再開するまでの道のりを紹介している。投稿4日目でまだ伸びている途中。"],tags:["共同投稿","物語"]},
+  {cls:"",t:"袋を持ってパンを買いに行く、ある日の買い物",a:"丘の上のパン屋",d:"2026年10月16日",url:"https://www.instagram.com/okanouenopanya/reel/Dei6Ez3BB81/",v:"2.9万",l:"158",lr:"0.5%",fr:"0.5倍",
+   why:["個包装を減らす活動をしているアカウントとの共同投稿。お店の公式が投稿したものではない。","お客さんが自分の袋を持って来店する様子を撮っている。お店の考え方(籠やタッパーの持参をお願いしている)が伝わる。","このお店のリールは普段5千回前後なので、約5.5倍。"],tags:["共同投稿","お店の考え方"]},
+];
+const special={cls:"special",t:"「本日夕方、火事になってしまいました」",a:"うどん屋仁",d:"2026年2月1日",url:"https://www.instagram.com/udonya_jin/reel/DUNdKXgE7aq/",v:"342.4万",l:"7,145",lr:"0.2%",fr:"471倍",
+   why:["お店の火事の現場を撮った動画。今回調べた個人店で最大の再生数だが、狙って再現できるものではない。","コメントには励ましと同時に、「消防の人の横で撮影してSNSに上げるのは失礼」という批判も入っていた。","この後お店は「復活への道」として再建の様子を発信し続け、ボランティア募集の動画は10.3万回、再開の共同投稿は6.9万回に届いた。"],tags:[]};
+const flat={cls:"flat",t:"米粉パンランチのお休みのお知らせ(画像)",a:"平林食堂",d:"2026年9月22日",url:"https://www.instagram.com/hirabayashi_shokudo/reel/DdklzJHS7Lh/",v:"約700",l:"19",lr:"約3%",fr:"1.6倍",
+   why:["文字のお知らせと料理写真2枚を並べた、動きのない画像のリール。","フォロワーが少なくても、いつものリールは500回前後見られている。ただし、フォロワー以外の人が止まる理由がないので、それ以上は広がらない。","同じお知らせでも、料理を作る手元の動画に文字を重ねれば、届く範囲は変わるはず。"],tags:[]};
+const stat=(k,label,val,hl)=>`<div class="stat${hl?' hl':''}"><span>${label}</span><strong>${val}</strong></div>`;
+const card=r=>`<article class="reel ${r.cls}">
+  <div class="reel-head"><h3>${r.t}</h3><span class="meta">${r.a} · ${r.d}</span></div>
+  <div class="stats">${stat('v','再生',r.v)}${stat('fr','フォロワー比',r.fr,true)}${stat('l','いいね',r.l)}${stat('lr','いいね率',r.lr)}</div>
+  <ul class="why">${r.why.map(w=>`<li>${w}</li>`).join('')}</ul>
+  <div class="tags">${r.cls==='special'?'<span class="chip warn">再現できない例</span>':r.cls==='flat'?'<span class="chip flat">伸びない例</span>':r.tags.map(t=>`<span class="tag">${t}</span>`).join('')}<a href="${r.url}" target="_blank" rel="noopener" style="margin-left:auto;font-size:13px">投稿を見る</a></div>
+</article>`;
+document.getElementById('reels').innerHTML=reels.map(card).join('')+card(special)+card(flat);
+</script>
