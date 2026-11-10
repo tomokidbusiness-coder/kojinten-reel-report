@@ -3,10 +3,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
 <style>
-/* Layout: 縦一列の読み物。結論 → 9店の比較(表+対数チャート) → 1本ずつの解剖 → 伸びない例 → 型 → 真似の手順 */
+/* Layout: 結論 → 数字で見る全体像 → 跳ねた上位の表 → 1本ずつの解剖 → 型 → ジャンル比較 → 真似の手順 → 調べ方 */
 :root{
   --bg:#f7f6f3; --surface:#ffffff; --ink:#1f2128; --muted:#5f6370; --line:#e2e0da;
-  --ai:#2f5d4e;        /* 深緑: のれんの色 */
+  --ai:#2f5d4e;
   --karashi:#c9921e;
   --warn:#b4432f; --warn-bg:#fbede9;
   --gray-bg:#efeeea;
@@ -77,153 +77,109 @@ td.note{text-align:left;white-space:normal;color:var(--muted);font-size:14px;min
 .method{font-size:14.5px;color:var(--muted);display:grid;gap:6px;padding-left:1.1em;margin:0}
 a{color:var(--ai)}
 a:focus-visible{outline:2px solid var(--ai);outline-offset:2px}
-</style>
 
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:2px}
+.kpi span{font-size:12.5px;color:var(--muted)}
+.kpi strong{font-family:var(--f-num);font-size:24px;font-weight:700;color:var(--ai);line-height:1.3}
+.kpi small{font-size:12.5px;color:var(--muted)}
+@media (max-width:640px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.cmp td:first-child{white-space:normal}
+.cmp tr.me td{background:color-mix(in srgb,var(--ai) 9%,transparent);font-weight:500}
+.nav{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:14px}
+</style>
 <div class="wrap">
 
 <header style="display:grid;gap:14px">
-  <div class="eyebrow">Instagram リール調査 · 個人店編 · 2026年11月9日時点</div>
-  <h1>フォロワー数千人の個人店が、<br>10万回届いたリールを解剖する</h1>
-  <p class="lede">町中華、つけ麺屋、立ち飲み、うどん屋、パン屋など、個人や数店舗規模の飲食店9つの公式アカウントを調べました。各店の「いつもの再生数」から大きく跳ねたリールを開いて、何が違ったのかを見ています。比較のため、伸びていない店のリールも1本入れました。</p>
+  <nav class="nav" aria-label="ほかのジャンル"><span>飲食の個人店</span><a href="https://tomokidbusiness-coder.github.io/nail-reel-report/">ネイルサロン</a><a href="https://tomokidbusiness-coder.github.io/beauty-salon-reel-report/">美肌・スキンケア</a><a href="https://tomokidbusiness-coder.github.io/eyelash-reel-report/">まつ毛・眉</a></nav>
+  <div class="eyebrow">Instagram リール調査 · 飲食の個人店編 · 2026年11月10日時点</div>
+  <h1>飲食の個人店48店の、<br>伸びたリールを解剖する</h1>
+  <p class="lede">町中華、ラーメン、そば、おでん、パン屋、カフェ、酒場など、個人や小さなチームで営む飲食店48店のリールを調べました。前回の9店から約5倍に増やしています。各店の「いつもの再生数」を出し、そこから大きく跳ねたリールを開いて、何が違ったのかを見ています。</p>
 </header>
 
 <section>
   <h2><small>SUMMARY</small>先に結論</h2>
-  <ol class="points">
-    <li><p><b>個人店の一番の武器は「共同投稿」でした。</b>荒川STANDの上位2本はどちらも店主の個人アカウントとの共同投稿で、丘の上のパン屋の最高も他アカウントとの共同投稿でした。自分のフォロワーが少なくても、相手のフォロワーに届きます。</p></li>
-    <li><p><b>「知ってた?」の一言と、とろける手元で、フォロワーの10倍以上に届く。</b>つけ麺屋の「250円で更に楽しめるの知ってた?」は8.3万回(フォロワーの11倍)。町中華の、卵あんをご飯にかける手元の動画は1.8万回(フォロワーの17倍)でした。</p></li>
-    <li><p><b>文字だけのお知らせ画像は、ほぼ伸びない。</b>営業日のお知らせを画像にしたリールは、いいね19件でした。お知らせは、料理や人が動く映像に乗せた方が届きます。</p></li>
-  </ol>
+  <ol class="points"><li><p><b>4割の店に、いつもの5倍以上に跳ねたリールがありました。</b>48店のうち19店です。10倍以上も13店ありました。いつもの再生数の中央値は約2,228回で、4ジャンルの中で一番高めです。</p></li><li><p><b>一番多かった跳ね方は「共同投稿」でした。</b>地元の発信者やグルメメディア、レシピ発信者と一緒に投稿したリールが、各店の最高再生数になっている例が目立ちます。相手のフォロワーにも届くので、自分のフォロワーが少なくても伸びます。</p></li><li><p><b>自然に伸びたリールは、新メニューのシズルと仕込みの裏側でした。</b>「背徳感たっぷり ホルモン味噌まぜそば」は24.5万回、いいね率0.94%。一方で、営業時間とアクセスだけを書いたリールが18万回を超えていいねがほぼ付いていない例もあり、こちらは広告の可能性が高いです。</p></li></ol>
 </section>
 
-<section>
-  <h2><small>OVERVIEW</small>9店の比較</h2>
-  <p class="lede">「いつもの再生数」は、リール一覧の直近約16本の中央値です。「跳ね幅」は最高再生数がその何倍か、「フォロワー比」は最高再生数がフォロワー数の何倍かを表します。</p>
-  <div class="tbl">
-  <table>
-    <thead><tr><th>お店</th><th>フォロワー</th><th>いつもの再生数</th><th>最高再生数</th><th>跳ね幅</th><th>フォロワー比</th><th>メモ</th></tr></thead>
-    <tbody id="acct-rows"></tbody>
-  </table>
-  </div>
-  <div class="chart" role="img" aria-label="お店別、最高再生数がいつもの何倍だったか(対数目盛)">
-    <svg id="mult" viewBox="0 0 640 360"></svg>
-  </div>
-  <p class="caption">横軸は対数目盛です(1倍、10倍、100倍が等間隔)。うどん屋仁の114倍は、お店の火事を撮った動画によるもので、狙って再現できるものではありません。</p>
+<section style="display:grid;gap:16px">
+  <h2><small>NUMBERS</small>48アカウントの全体像</h2>
+  <div class="kpis">
+  <div class="kpi"><span>調べたアカウント</span><strong>48件</strong><small>リール6本以上</small></div>
+  <div class="kpi"><span>フォロワー数(中央値)</span><strong>1,666人</strong><small>真ん中のアカウント</small></div>
+  <div class="kpi"><span>いつもの再生数(中央値)</span><strong>2,228回</strong><small>直近12本の中央値</small></div>
+  <div class="kpi"><span>5倍以上に跳ねた</span><strong>40%</strong><small>19件 / 10倍以上は13件</small></div>
+</div>
+  <div class="chart"><svg viewBox="0 0 640 274" role="img" aria-label="跳ね幅ごとのアカウント数"><rect x="40" y="24.0" width="80" height="200.0" rx="3" fill="var(--muted)" opacity=".45"/><text x="80.0" y="18.0" text-anchor="middle" font-size="14" fill="var(--ink)" font-family="Noto Sans JP, sans-serif">15件</text><text x="80.0" y="244" text-anchor="middle" font-size="13" fill="var(--muted)" font-family="Noto Sans JP, sans-serif">2倍未満</text><rect x="136" y="117.3" width="80" height="106.7" rx="3" fill="var(--muted)" opacity=".45"/><text x="176.0" y="111.3" text-anchor="middle" font-size="14" fill="var(--ink)" font-family="Noto Sans JP, sans-serif">8件</text><text x="176.0" y="244" text-anchor="middle" font-size="13" fill="var(--muted)" font-family="Noto Sans JP, sans-serif">2〜3倍</text><rect x="232" y="144.0" width="80" height="80.0" rx="3" fill="var(--muted)" opacity=".45"/><text x="272.0" y="138.0" text-anchor="middle" font-size="14" fill="var(--ink)" font-family="Noto Sans JP, sans-serif">6件</text><text x="272.0" y="244" text-anchor="middle" font-size="13" fill="var(--muted)" font-family="Noto Sans JP, sans-serif">3〜5倍</text><rect x="328" y="144.0" width="80" height="80.0" rx="3" fill="var(--ai)" opacity=".9"/><text x="368.0" y="138.0" text-anchor="middle" font-size="14" fill="var(--ink)" font-family="Noto Sans JP, sans-serif">6件</text><text x="368.0" y="244" text-anchor="middle" font-size="13" fill="var(--muted)" font-family="Noto Sans JP, sans-serif">5〜10倍</text><rect x="424" y="77.3" width="80" height="146.7" rx="3" fill="var(--ai)" opacity=".9"/><text x="464.0" y="71.3" text-anchor="middle" font-size="14" fill="var(--ink)" font-family="Noto Sans JP, sans-serif">11件</text><text x="464.0" y="244" text-anchor="middle" font-size="13" fill="var(--muted)" font-family="Noto Sans JP, sans-serif">10〜30倍</text><rect x="520" y="197.3" width="80" height="26.7" rx="3" fill="var(--ai)" opacity=".9"/><text x="560.0" y="191.3" text-anchor="middle" font-size="14" fill="var(--ink)" font-family="Noto Sans JP, sans-serif">2件</text><text x="560.0" y="244" text-anchor="middle" font-size="13" fill="var(--muted)" font-family="Noto Sans JP, sans-serif">30倍以上</text><line x1="34" x2="606" y1="224" y2="224" stroke="var(--line)"/><text x="40" y="266" font-size="12.5" fill="var(--muted)" font-family="Noto Sans JP, sans-serif">濃い色 = いつもの5倍以上に跳ねたリールがあるアカウント</text></svg></div>
+  <p class="caption">「跳ね幅」は、直近12〜15本のリールの中で一番再生されたものが、いつもの再生数(中央値)の何倍だったかです。飲食は「2倍未満」の安定型も多い一方、10〜30倍の店が11店とまとまっています。</p>
 </section>
 
-<section>
+<section style="display:grid;gap:16px">
+  <h2><small>TOP 15</small>大きく跳ねたアカウント</h2>
+  <p class="lede">跳ね幅の大きい順です。最高再生数をクリックすると、そのリールが開きます。メモは、実際にリールを開いて確認した内容です。</p>
+  <div class="tbl"><table><thead><tr><th>アカウント</th><th>フォロワー</th><th>いつもの再生数</th><th>最高再生数</th><th>跳ね幅</th><th>フォロワー比</th><th>メモ</th></tr></thead><tbody><tr><td><a href="https://www.instagram.com/teishoku_mimatsu/" target="_blank" rel="noopener">@teishoku_mimatsu</a></td><td class="num">2,790</td><td class="num">約3,632</td><td class="num"><a href="https://www.instagram.com/reel/C8naIH3yVRL/" target="_blank" rel="noopener">18.6万</a></td><td class="num"><b>51倍</b></td><td class="num">67倍</td><td class="note"><span class="chip warn">宣伝型?</span> 料理名と営業時間だけ。いいねはごくわずか</td></tr><tr><td><a href="https://www.instagram.com/tokyo_templand/" target="_blank" rel="noopener">@tokyo_templand</a></td><td class="num">843</td><td class="num">約142</td><td class="num"><a href="https://www.instagram.com/reel/CogdDcsrNKt/" target="_blank" rel="noopener">5,320</a></td><td class="num"><b>37倍</b></td><td class="num">6.3倍</td><td class="note"><span class="chip ok">オープン告知</span> 開店当日のリール</td></tr><tr><td><a href="https://www.instagram.com/ramen_yukikage/" target="_blank" rel="noopener">@ramen_yukikage</a></td><td class="num">2,431</td><td class="num">約1,710</td><td class="num"><a href="https://www.instagram.com/reel/DTEuKZkEkVF/" target="_blank" rel="noopener">4.9万</a></td><td class="num"><b>29倍</b></td><td class="num">20倍</td><td class="note"><span class="chip warn">宣伝型?</span> 英語キャプションの冷やしつけ麺</td></tr><tr><td><a href="https://www.instagram.com/smileats_/" target="_blank" rel="noopener">@smileats_</a></td><td class="num">591</td><td class="num">約517</td><td class="num"><a href="https://www.instagram.com/reel/DP8RnuBj16A/" target="_blank" rel="noopener">1.4万</a></td><td class="num"><b>27倍</b></td><td class="num">24倍</td><td class="note"><span class="chip ok">地域イベント</span> 淀川花火の日のイベント告知</td></tr><tr><td><a href="https://www.instagram.com/choioden/" target="_blank" rel="noopener">@choioden</a></td><td class="num">1,441</td><td class="num">約1,175</td><td class="num"><a href="https://www.instagram.com/reel/DKhAFVnPU2d/" target="_blank" rel="noopener">2.7万</a></td><td class="num"><b>23倍</b></td><td class="num">19倍</td><td class="note"><span class="chip ok">共同投稿</span> レシピ発信者と</td></tr><tr><td><a href="https://www.instagram.com/sushitooden_ninoya_yuurakuchou/" target="_blank" rel="noopener">@sushitooden_ninoya_yuurakuchou</a></td><td class="num">6,673</td><td class="num">約1,855</td><td class="num"><a href="https://www.instagram.com/reel/DRGxAVAj6dn/" target="_blank" rel="noopener">4.1万</a></td><td class="num"><b>22倍</b></td><td class="num">6.1倍</td><td class="note"><span class="chip ok">季節の一品</span> 九条ねぎのおでん</td></tr><tr><td><a href="https://www.instagram.com/tukesobashichifuku/" target="_blank" rel="noopener">@tukesobashichifuku</a></td><td class="num">1,238</td><td class="num">約2,827</td><td class="num"><a href="https://www.instagram.com/reel/DbekLtcSDfA/" target="_blank" rel="noopener">5.5万</a></td><td class="num"><b>19倍</b></td><td class="num">44倍</td><td class="note"><span class="chip ok">共同投稿</span> 地元の発信者と</td></tr><tr><td><a href="https://www.instagram.com/shatenki2/" target="_blank" rel="noopener">@shatenki2</a></td><td class="num">878</td><td class="num">約1,407</td><td class="num"><a href="https://www.instagram.com/reel/DfVb2I4ziNt/" target="_blank" rel="noopener">2.6万</a></td><td class="num"><b>18倍</b></td><td class="num">30倍</td><td class="note"><span class="chip ok">仕込みの裏側</span> 4時間炊く中華粥</td></tr><tr><td><a href="https://www.instagram.com/machida.muni/" target="_blank" rel="noopener">@machida.muni</a></td><td class="num">2,805</td><td class="num">約3,412</td><td class="num"><a href="https://www.instagram.com/reel/DcaXpn2POe9/" target="_blank" rel="noopener">6.1万</a></td><td class="num"><b>18倍</b></td><td class="num">22倍</td><td class="note"><span class="chip ok">特典告知</span> いいね率1.1%</td></tr><tr><td><a href="https://www.instagram.com/roji_coffee/" target="_blank" rel="noopener">@roji_coffee</a></td><td class="num">4,677</td><td class="num">約3,494</td><td class="num"><a href="https://www.instagram.com/reel/DXTXvmjAXPF/" target="_blank" rel="noopener">5.9万</a></td><td class="num"><b>17倍</b></td><td class="num">13倍</td><td class="note"><span class="chip ok">期間限定メニュー</span> いいね率1.1%</td></tr><tr><td><a href="https://www.instagram.com/asakusa_ramen_yoroiya/" target="_blank" rel="noopener">@asakusa_ramen_yoroiya</a></td><td class="num">5,508</td><td class="num">約948</td><td class="num"><a href="https://www.instagram.com/reel/DL7A9enT21c/" target="_blank" rel="noopener">1.4万</a></td><td class="num"><b>15倍</b></td><td class="num">2.5倍</td><td class="note"><span class="chip ok">共同投稿</span> グルメメディアと</td></tr><tr><td><a href="https://www.instagram.com/nikakushokudo/" target="_blank" rel="noopener">@nikakushokudo</a></td><td class="num">895</td><td class="num">約2万</td><td class="num"><a href="https://www.instagram.com/reel/DfRSXR4SGbR/" target="_blank" rel="noopener">24.5万</a></td><td class="num"><b>13倍</b></td><td class="num">274倍</td><td class="note"><span class="chip ok">新メニュー</span> 24.5万回・シェア639</td></tr><tr><td><a href="https://www.instagram.com/hinoya_yokohama1/" target="_blank" rel="noopener">@hinoya_yokohama1</a></td><td class="num">889</td><td class="num">約601</td><td class="num"><a href="https://www.instagram.com/reel/CUmYfodlOHo/" target="_blank" rel="noopener">6,707</a></td><td class="num"><b>11倍</b></td><td class="num">7.5倍</td><td class="note"></td></tr><tr><td><a href="https://www.instagram.com/tokyogyoza.akari/" target="_blank" rel="noopener">@tokyogyoza.akari</a></td><td class="num">1,321</td><td class="num">約971</td><td class="num"><a href="https://www.instagram.com/reel/CxxYPWySV7C/" target="_blank" rel="noopener">7,854</a></td><td class="num"><b>8.1倍</b></td><td class="num">5.9倍</td><td class="note"></td></tr><tr><td><a href="https://www.instagram.com/sora_831_oganic/" target="_blank" rel="noopener">@sora_831_oganic</a></td><td class="num">1,748</td><td class="num">約1,509</td><td class="num"><a href="https://www.instagram.com/reel/DHoIJAIyzza/" target="_blank" rel="noopener">9,880</a></td><td class="num"><b>6.5倍</b></td><td class="num">5.7倍</td><td class="note"></td></tr></tbody></table></div>
+</section>
+
+<section style="display:grid;gap:16px">
   <h2><small>CASES</small>伸びたリール、一本ずつ</h2>
-  <p class="lede">いいね率は「いいね数÷再生数」です。個人店のリールは0.2〜2%と、大手チェーン(1〜4%)より低めでした。再生のほとんどがフォロワー以外からで、知らない店の動画にはいいねまでしない人が多いためと考えられます。</p>
-  <div class="reels" id="reels"></div>
+  <p class="lede">いいね率は「いいね数÷再生数」です。自然に伸びたリールは0.5〜1%前後、宣伝型と思われるリールは0.3%未満に分かれました。</p>
+  <div class="reels"><article class="reel ">
+  <div class="reel-head"><h3>「背徳感たっぷり。」ホルモン味噌まぜそば</h3><span class="meta">@nikakushokudo · 2026年11月3日</span></div>
+  <div class="stats"><div class="stat"><span>再生</span><strong>24.5万</strong></div><div class="stat hl"><span>いつもの何倍</span><strong>13倍</strong></div><div class="stat"><span>いいね</span><strong>2,295</strong></div><div class="stat"><span>いいね率</span><strong>0.94%</strong></div></div>
+  <ul class="why"><li>キャプションは「背徳感たっぷり。」の一言から始まり、新メニューの開始日を告知している。</li><li>いつもの再生数がすでに約2万回ある店で、さらに12倍。シェアが639件と多く、「これ食べに行こう」と誰かに送られている。</li><li>フォロワー895人の店で24.5万回。食欲に直接うったえる一品は、知らない人にも届く。</li></ul>
+  <div class="tags"><span class="tag">新メニュー</span><span class="tag">シズル</span><span class="tag">一言目のコピー</span><a href="https://www.instagram.com/reel/DfRSXR4SGbR/" target="_blank" rel="noopener" style="margin-left:auto;font-size:13px">投稿を見る</a></div>
+</article><article class="reel ">
+  <div class="reel-head"><h3>地元の発信者との共同投稿</h3><span class="meta">@tukesobashichifuku · 2026年8月1日</span></div>
+  <div class="stats"><div class="stat"><span>再生</span><strong>5.5万</strong></div><div class="stat hl"><span>いつもの何倍</span><strong>19倍</strong></div><div class="stat"><span>いいね</span><strong>563</strong></div><div class="stat"><span>いいね率</span><strong>1.02%</strong></div></div>
+  <ul class="why"><li>店のアカウントではなく、地元の発信者が主の共同投稿として出ている。</li><li>いいね率は1.0%で、広告ではなく自然に届いたと考えられる。</li><li>フォロワー1,238人の店が5.5万回。前回の9店調査でも、共同投稿は伸びる型の筆頭だった。</li></ul>
+  <div class="tags"><span class="tag">共同投稿</span><a href="https://www.instagram.com/reel/DbekLtcSDfA/" target="_blank" rel="noopener" style="margin-left:auto;font-size:13px">投稿を見る</a></div>
+</article><article class="reel ">
+  <div class="reel-head"><h3>「朝８時でも行列…浅草の伝説ラーメン店」</h3><span class="meta">@asakusa_ramen_yoroiya · 2025年7月10日</span></div>
+  <div class="stats"><div class="stat"><span>再生</span><strong>1.4万</strong></div><div class="stat hl"><span>いつもの何倍</span><strong>15倍</strong></div><div class="stat"><span>いいね</span><strong>458</strong></div><div class="stat"><span>いいね率</span><strong>3.27%</strong></div></div>
+  <ul class="why"><li>グルメメディアのアカウントとの共同投稿。紹介される側として映っている。</li><li>「朝8時でも行列」という、行ってみたくなる事実を一言目に置いている。</li><li>いいね率は3.3%と、今回の飲食で一番高い。</li></ul>
+  <div class="tags"><span class="tag">共同投稿</span><span class="tag">グルメメディア</span><a href="https://www.instagram.com/reel/DL7A9enT21c/" target="_blank" rel="noopener" style="margin-left:auto;font-size:13px">投稿を見る</a></div>
+</article><article class="reel ">
+  <div class="reel-head"><h3>レシピ発信者が、店のだしセットで料理する</h3><span class="meta">@choioden · 2025年6月5日</span></div>
+  <div class="stats"><div class="stat"><span>再生</span><strong>2.7万</strong></div><div class="stat hl"><span>いつもの何倍</span><strong>23倍</strong></div><div class="stat"><span>いいね</span><strong>157</strong></div><div class="stat"><span>いいね率</span><strong>0.58%</strong></div></div>
+  <ul class="why"><li>料理の発信者が、店の「鱧出汁セット」を使って家で料理するリール。店の名前は共同投稿者として並ぶ。</li><li>店に来てもらう前に、通販の商品を通して店を知ってもらう流れになっている。</li><li>いつもの約1,200回から2.7万回へ、23倍。</li></ul>
+  <div class="tags"><span class="tag">共同投稿</span><span class="tag">通販商品</span><a href="https://www.instagram.com/reel/DKhAFVnPU2d/" target="_blank" rel="noopener" style="margin-left:auto;font-size:13px">投稿を見る</a></div>
+</article><article class="reel ">
+  <div class="reel-head"><h3>毎朝の仕込み、生米から4時間炊く中華粥</h3><span class="meta">@shatenki2 · 2026年11月5日</span></div>
+  <div class="stats"><div class="stat"><span>再生</span><strong>2.6万</strong></div><div class="stat hl"><span>いつもの何倍</span><strong>18倍</strong></div><div class="stat"><span>いいね</span><strong>152</strong></div><div class="stat"><span>いいね率</span><strong>0.58%</strong></div></div>
+  <ul class="why"><li>「生米から、乾燥牡蠣・乾燥貝柱・丸鶏をフランスの岩塩で、4時間以上かけて炊いています」と、手間を具体的な数字で書いている。</li><li>完成品ではなく、毎朝の仕込みの様子を見せている。</li><li>最後に「明日の朝、初めての方向けの保存版ガイドを投稿します」と、次の投稿の予告まで入れている。</li></ul>
+  <div class="tags"><span class="tag">仕込みの裏側</span><span class="tag">手間を見せる</span><a href="https://www.instagram.com/reel/DfVb2I4ziNt/" target="_blank" rel="noopener" style="margin-left:auto;font-size:13px">投稿を見る</a></div>
+</article><article class="reel ">
+  <div class="reel-head"><h3>期間限定の新作ベーグル</h3><span class="meta">@roji_coffee · 2026年4月19日</span></div>
+  <div class="stats"><div class="stat"><span>再生</span><strong>5.9万</strong></div><div class="stat hl"><span>いつもの何倍</span><strong>17倍</strong></div><div class="stat"><span>いいね</span><strong>639</strong></div><div class="stat"><span>いいね率</span><strong>1.08%</strong></div></div>
+  <ul class="why"><li>「期間限定NEWベーグル登場」と、今だけ感を一言目に出している。</li><li>米粉の手作りグルテンフリーベーグルという、ほかの店との違いをはっきり書いている。</li><li>いいね率1.1%。自然に届いたリールと考えられる。</li></ul>
+  <div class="tags"><span class="tag">期間限定</span><span class="tag">新メニュー</span><a href="https://www.instagram.com/reel/DXTXvmjAXPF/" target="_blank" rel="noopener" style="margin-left:auto;font-size:13px">投稿を見る</a></div>
+</article><article class="reel special">
+  <div class="reel-head"><h3>「イワシのみりん干し」営業時間とアクセスだけ</h3><span class="meta">@teishoku_mimatsu · 2024年6月25日</span></div>
+  <div class="stats"><div class="stat"><span>再生</span><strong>18.6万</strong></div><div class="stat hl"><span>いつもの何倍</span><strong>51倍</strong></div><div class="stat"><span>いいね</span><strong>ごくわずか</strong></div><div class="stat"><span>いいね率</span><strong>—</strong></div></div>
+  <ul class="why"><li>キャプションは料理名、営業時間、定休日、駅からの距離だけ。</li><li>18.6万回に対して、いいねがほとんど付いていない。広告として配信された可能性が高い。</li><li>広告に乗せるなら、このくらい情報を絞った方が判断しやすい、という見方もできる。</li></ul>
+  <div class="tags"><span class="chip warn">宣伝型の可能性</span><span class="tag">営業時間</span><span class="tag">アクセス</span><a href="https://www.instagram.com/reel/C8naIH3yVRL/" target="_blank" rel="noopener" style="margin-left:auto;font-size:13px">投稿を見る</a></div>
+</article></div>
 </section>
 
-<section>
-  <h2><small>PATTERNS</small>個人店で伸びた「型」</h2>
-  <div class="types">
-    <div class="type"><h3>共同投稿で、他人のフォロワーに乗る</h3><p>投稿するときに相手を「共同投稿者」に招待すると、両方のフォロワーに表示されます。店主の個人アカウント、常連のインフルエンサー、取引先などが相手になります。</p><p class="ex">荒川STAND 9.9万回・7.6万回 / うどん屋仁 再開 6.9万回 / 丘の上のパン屋 2.9万回</p></div>
-    <div class="type"><h3>「知ってた?」で得する情報を出す</h3><p>替え玉、裏メニュー、トッピングなど、知っている人だけ得する話を、問いかけのテロップで始める。最後まで見て答えを知りたくなります。</p><p class="ex">時しらず「250円で更に楽しめるの知ってた?」8.3万回</p></div>
-    <div class="type"><h3>とろける手元と、流行りの曲</h3><p>チーズ、卵あん、麻婆などが流れ落ちる瞬間を、寄りで撮る。そこに今はやっている曲を合わせると、おすすめに乗りやすくなります。</p><p class="ex">さしろく 1.8万回 / 時しらず 土鍋麻婆麺 6.3万回</p></div>
-    <div class="type"><h3>お店の物語を続けて見せる</h3><p>うどん屋仁は、火事のあとに「復活への道」として、キッチンカーでの営業やペンキ塗りのボランティア募集を発信し続けました。再開の日は、地元の人が共同投稿で祝っています。</p><p class="ex">うどん屋仁 再建の様子 10.3万回 / 再開 6.9万回(投稿4日目)</p></div>
-    <div class="type no"><h3>伸びない型: 文字だけのお知らせ</h3><p>営業日や予約方法を画像にまとめたリールは、どの店でも数百回どまりでした。動きがなく、知らない人が見ても止まる理由がありません。</p><p class="ex">平林食堂のお知らせ いいね19件</p></div>
-  </div>
+<section style="display:grid;gap:16px">
+  <h2><small>PATTERNS</small>飲食の個人店で跳ねた「型」</h2>
+  <div class="types"><div class="type"><h3>共同投稿</h3><p>地元の発信者、グルメメディア、レシピ発信者と一緒に投稿する。相手のフォロワーにも表示されるので、フォロワーが少ない店ほど効果が大きい。</p><p class="ex">つけそば七福 5.5万回 / ちょいおでん 2.7万回 / 与ろゐ屋 1.4万回</p></div><div class="type"><h3>新メニューを、シズルと一言で</h3><p>「背徳感たっぷり。」のように、食べたくなる一言と、湯気やタレのアップを合わせる。開始日を書くと、行く理由になる。</p><p class="ex">ニカク食堂 24.5万回</p></div><div class="type"><h3>仕込みの裏側と、手間の数字</h3><p>「4時間炊く」「生米から」など、手間を数字で見せる。完成品の写真より、店のこだわりが伝わる。</p><p class="ex">謝甜記 2.6万回</p></div><div class="type"><h3>期間限定・季節の一品</h3><p>「期間限定」「この時期にぴったり」と、今だけの理由を付ける。</p><p class="ex">ロジコーヒー 5.9万回 / にのや 4.1万回</p></div><div class="type no"><h3>宣伝型: 料理名と営業時間だけ</h3><p>18万回を超えても、いいねがほとんど付かないリール。広告で届けた可能性が高く、知ってもらうことはできても、ファンにはなりにくい。</p><p class="ex">Teishoku 美松 18.6万回</p></div></div>
 </section>
 
-<section>
-  <h2><small>VS CHAINS</small>大手チェーンとの違い</h2>
-  <div class="compare">
-    <div><h3>大手チェーン</h3><p>コラボ相手はアーティストや有名ブランド。いいね率は1〜4%で、ファンが応援の気持ちで反応している。</p></div>
-    <div><h3>個人店</h3><p>コラボ相手は店主本人、常連、地元の人。いいね率は0.2〜2%で、見ているのはほぼ初めてお店を知る人。1本で予約が埋まるほどではなくても、「お店を知ってもらう入口」として働いている。</p></div>
-  </div>
+<section style="display:grid;gap:16px">
+  <h2><small>COMPARE</small>4ジャンルを並べると</h2>
+  <div class="tbl"><table class="cmp"><thead><tr><th>ジャンル</th><th>件数</th><th>フォロワー中央値</th><th>いつもの再生数</th><th>5倍以上</th><th>10倍以上</th></tr></thead><tbody><tr class="me"><td>飲食の個人店</td><td class="num">48</td><td class="num">1,666</td><td class="num">2,228</td><td class="num">40%</td><td class="num">27%</td></tr><tr class=""><td>ネイルサロン</td><td class="num">61</td><td class="num">817</td><td class="num">960</td><td class="num">34%</td><td class="num">20%</td></tr><tr class=""><td>美肌・スキンケアサロン</td><td class="num">52</td><td class="num">916</td><td class="num">728</td><td class="num">40%</td><td class="num">23%</td></tr><tr class=""><td>まつ毛・眉サロン</td><td class="num">80</td><td class="num">589</td><td class="num">1,038</td><td class="num">39%</td><td class="num">19%</td></tr></tbody></table></div>
+  <p class="caption">飲食は「いつもの再生数」が高く、共同投稿で伸びた例が多いのが特徴です。美容系の3ジャンルは、跳ねる割合は飲食と同じくらいでも、宣伝型と思われるリールの割合が高めでした。</p>
 </section>
 
-<section>
+<section style="display:grid;gap:16px">
   <h2><small>NEXT STEP</small>明日から真似するなら</h2>
-  <ul class="todo">
-    <li><b>① 店主の個人アカウントを作り、お店の投稿に共同投稿者として入れる</b>一番お金がかからず、すぐできる方法です。常連さんやご近所のお店に頼むのも効果があります。</li>
-    <li><b>② 「知ってた?」で始まるテロップを1本作る</b>替え玉、追い飯、量の増やし方など、お客さんがよく聞いてくることがネタになります。</li>
-    <li><b>③ とろける・湯気が立つ瞬間を、スマホで寄って10秒撮る</b>曲は、リールの作成画面で「おすすめ」や上昇中になっているものを選びます。</li>
-    <li><b>④ お知らせは画像にせず、料理の動画の上に文字で重ねる</b>営業日や予約方法は、キャプションの下の方にまとめれば十分です。</li>
-  </ul>
+  <ul class="todo"><li><b>① 地元の発信者やグルメメディアに、共同投稿を相談する</b>一番再現しやすい伸ばし方です。来店してもらい、相手のアカウントを主にして共同投稿にします。</li><li><b>② 新メニューは、一言目のコピーを先に決める</b>「背徳感たっぷり」「朝8時でも行列」のように、料理名より先に気持ちが動く言葉を置きます。</li><li><b>③ 仕込みを撮って、手間を数字で書く</b>「4時間」「生米から」「毎朝」。完成品だけの投稿より、店の顔が見えます。</li><li><b>④ 広告を使うなら、反応が良かった投稿を少額で</b>料理名・営業時間・駅からの距離を短くまとめると、判断が早くなります。ただし、いいねやフォローにはつながりにくいことも覚えておきます。</li></ul>
 </section>
 
-<section>
+<section style="display:grid;gap:16px">
   <h2><small>METHOD</small>調べ方と、わかっていないこと</h2>
-  <ul class="method">
-    <li>Instagramの検索(町中華、定食屋、大衆酒場、ラーメン屋、パン屋など)と、リール活用事例を紹介している記事から候補を選び、Chromeで公式プロフィールを開いて再生数を読み取りました。全国からの無作為な抽出ではないので、偏りがあります。</li>
-    <li>伸びたリールだけを開いて、いいね・コメント・リポスト・シェアの数とキャプションを確認しました。いいね数を非表示にしている投稿や、コメント欄が閉じている投稿もあり、一部の数字は取れていません。</li>
-    <li>共同投稿は、相手のアカウント側の再生も合算されて表示されている可能性があります。広告として配信されたかどうかは、画面からはわかりません。</li>
-    <li>パン屋ザクロ、さかな商店、大衆酒場チャチャチャ、平林食堂は大きく跳ねたリールがなかったため、個別の解剖は平林食堂の1本だけにしています。</li>
-  </ul>
+  <ul class="method"><li>飲食の個人店48店(町中華、ラーメン、そば、うどん、おでん、パン、ベーグル、カフェ、酒場など)。前回の9店調査のうち、リールが6本以上あった店も含みます。</li><li>Instagramの検索から候補を集め、Chromeでプロフィールのリール一覧を開いて、直近12〜15本の再生数を読み取りました。全国から無作為に選んだわけではないので、検索に出やすいアカウントに偏っています。</li><li>リールが6本未満のアカウント、フォロワー5万人以上のアカウント、プロフィールにブロガー・講師・スクール・コンサル・株式会社などとあるアカウント、お店やサロンではないアカウントは外しました。</li><li><b>広告として配信されたかどうかは、画面からはわかりません。</b>「宣伝型」と書いているのは、キャプションの文面(地名・価格・初回割引・オープン告知)と、いいね率の低さ(おおむね0.3%未満)からの推測です。</li><li>いいね数を非表示にしている投稿も多く、その場合はいいね率を出していません。画面から読み取った数字のため、多少ずれている可能性があります。</li><li>投稿日はリールのIDから計算した日付です。調べている途中でInstagramの表示制限がかかり、一部のアカウントは読み取れませんでした。</li></ul>
 </section>
 
 </div>
-
-<script>
-const fmtN=v=>v>=10000?(Math.round(v/1000)/10)+'万':v.toLocaleString('ja-JP');
-const accts=[
-  {n:"うどん屋仁",id:"udonya_jin",area:"福岡・鞍手",f:7271,med:30000,top:3424000,note:'<span class="chip warn">火事の動画</span>'},
-  {n:"麺也 時しらず",id:"tokishirazu_menya",area:"東京・大井町",f:7287,med:2800,top:83000,note:'<span class="chip ok">「知ってた?」</span>'},
-  {n:"立ち飲みワイン 荒川STAND",id:"arakawa_stand",area:"東京・日暮里",f:6192,med:7300,top:99000,note:'<span class="chip ok">共同投稿</span>'},
-  {n:"町中華 さしろく",id:"_sashiroku_346",area:"東京・五反田",f:1077,med:1410,top:18000,note:'<span class="chip ok">とろける手元</span> リール5本のみ'},
-  {n:"丘の上のパン屋",id:"okanouenopanya",area:"神奈川・横浜",f:56000,med:5300,top:29000,note:'<span class="chip ok">共同投稿</span>'},
-  {n:"大衆酒場チャチャチャ",id:"chachacha_tokyo",area:"東京・丸の内",f:308,med:475,top:2260,note:'<span class="chip flat">大きな跳ねなし</span>'},
-  {n:"立ち飲み家 さかな商店",id:"sakanashoten",area:"—",f:886,med:3700,top:11000,note:'<span class="chip flat">大きな跳ねなし</span> 最近の投稿は少なめ'},
-  {n:"平林食堂",id:"hirabayashi_shokudo",area:"東京・大田区",f:439,med:550,top:1477,note:'<span class="chip flat">大きな跳ねなし</span>'},
-  {n:"パン屋ザクロ",id:"zacro152",area:"神奈川・横須賀",f:8125,med:7100,top:12000,note:'<span class="chip flat">安定型</span> 毎回7千前後'}
-];
-document.getElementById('acct-rows').innerHTML=accts.map(a=>{
-  const m=a.top/a.med, fr=a.top/a.f;
-  const r=v=>v>=10?Math.round(v):Math.round(v*10)/10;
-  return `<tr><td>${a.n}<br><span class="acct">@${a.id} · ${a.area}</span></td><td class="num">${fmtN(a.f)}</td><td class="num">約${fmtN(a.med)}</td><td class="num">${fmtN(a.top)}</td><td class="num"><b>${r(m)}倍</b></td><td class="num">${r(fr)}倍</td><td class="note">${a.note}</td></tr>`}).join('');
-
-(function(){
-  const svg=document.getElementById('mult'), ns='http://www.w3.org/2000/svg';
-  const data=accts.map(a=>({n:a.n,m:a.top/a.med,id:a.id})).sort((a,b)=>b.m-a.m);
-  const L=170,R=600,T=20,rowH=34,hi=Math.log10(200);
-  const x=v=>L+Math.log10(v)/hi*(R-L);
-  const el=(t,at,txt)=>{const e=document.createElementNS(ns,t);for(const k in at)e.setAttribute(k,at[k]);if(txt!=null)e.textContent=txt;svg.appendChild(e);return e};
-  const H=T+data.length*rowH+30; svg.setAttribute('viewBox',`0 0 640 ${H}`);
-  [1,2,5,10,20,50,100,200].forEach(t=>{
-    el('line',{x1:x(t),x2:x(t),y1:T-6,y2:T+data.length*rowH,stroke:'var(--line)','stroke-width':t===1||t===10||t===100?1.2:.6});
-    el('text',{x:x(t),y:T+data.length*rowH+18,'text-anchor':'middle','font-size':12,fill:'var(--muted)','font-family':'Noto Sans JP, sans-serif'},t+'倍');
-  });
-  data.forEach((d,i)=>{
-    const y=T+i*rowH;
-    const col=d.id==='udonya_jin'?'var(--warn)':(d.m>=5?'var(--ai)':'var(--muted)');
-    el('text',{x:L-10,y:y+rowH/2+4,'text-anchor':'end','font-size':13.5,fill:'var(--ink)'},d.n.length>11?d.n.replace('立ち飲みワイン ','').replace('立ち飲み家 ',''):d.n);
-    el('rect',{x:L,y:y+7,width:Math.max(2,x(d.m)-L),height:rowH-14,rx:3,fill:col,opacity:d.id==='udonya_jin'?.6:.9});
-    const lbl=(d.m>=10?Math.round(d.m):d.m.toFixed(1))+'倍';
-    const inside=x(d.m)>R-40;
-    el('text',{x:inside?x(d.m)-6:x(d.m)+6,y:y+rowH/2+4,'text-anchor':inside?'end':'start','font-size':13,fill:inside?'var(--surface)':'var(--ink)','font-family':'Noto Sans JP, sans-serif'},lbl);
-  });
-})();
-
-const reels=[
-  {cls:"",t:"「250円で更に楽しめるの知ってた?」二度麺",a:"麺也 時しらず",d:"2026年9月18日",url:"https://www.instagram.com/tokishirazu_menya/reel/Dda2UO9ykz5/",v:"8.3万",l:"437",lr:"0.5%",fr:"11倍",
-   why:["ラーメンやつけ麺のあとに、追加の麺(並250円、大350円)を頼める「二度麺」の紹介。","縦書きのテロップで「知ってた?」と問いかけ、麺を入れる手元を見せる。答えが気になって最後まで見てしまう作り。","1行目は「頼まないと後悔⁉️」。損したくない気持ちに訴えている。"],tags:["知ってた?","手元"]},
-  {cls:"",t:"店主アカウントとの共同投稿、週末の満席の店内",a:"荒川STAND",d:"2026年1月11日",url:"https://www.instagram.com/arakawa_stand/reel/DTWvwoZEgNC/",v:"9.9万",l:"371",lr:"0.4%",fr:"16倍",
-   why:["投稿したのは店主の個人アカウントで、お店の公式は共同投稿者。両方のフォロワーに届いている。","立ち飲みで人がぎっしりの店内を、そのまま撮っただけ。「にぎわっている店」が一目で伝わる。","音源はLE SSERAFIMの流行り曲。おすすめに乗りやすい。"],tags:["共同投稿","にぎわい","流行りの曲"]},
-  {cls:"",t:"スタッフ研修のあと、みんなで乾杯",a:"荒川STAND",d:"2025年11月19日",url:"https://www.instagram.com/arakawa_stand/reel/DROxjtmkn59/",v:"7.6万",l:"231",lr:"0.3%",fr:"12倍",
-   why:["これも店主の個人アカウントとの共同投稿。料理は映っておらず、スタッフが缶を持って笑っている数秒の動画。","「地域に愛される安心安全なお店づくり」がテーマの研修だった、と添えている。働く人の雰囲気が伝わる。","音源はTylaの流行り曲。"],tags:["共同投稿","スタッフ","流行りの曲"]},
-  {cls:"",t:"とろとろの卵あんを、ご飯にかける手元",a:"町中華 さしろく",d:"2026年5月22日",url:"https://www.instagram.com/_sashiroku_346/reel/DYoKnM1pwrj/",v:"1.8万",l:"321",lr:"1.8%",fr:"17倍",
-   why:["お玉で黄色い卵あんを丼にかける瞬間を、真上から寄って撮っている。説明なしで「おいしそう」が伝わる。","フォロワー1,077人に対して1.8万回。今回の個人店の中で、フォロワー比が2番目に高い。","キャプションは2行だけ。「ふらっと寄れる町中華」と、日本酒が合うことだけを伝えている。"],tags:["とろける手元","流行りの曲"]},
-  {cls:"",t:"「年内ラストの」土鍋麻婆麺、チーズのせ",a:"麺也 時しらず",d:"2026年10月29日",url:"https://www.instagram.com/tokishirazu_menya/reel/DfEtT-YJlvM/",v:"6.3万",l:"245",lr:"0.4%",fr:"9倍",
-   why:["季節限定の麻婆麺。チーズと麻婆をご飯にのせる瞬間を寄りで撮っている。","テロップは「年内ラストの」。今しか食べられないと伝えている。","音源はAyumu Imazu「結び」。"],tags:["とろける手元","期間限定","流行りの曲"]},
-  {cls:"",t:"地元の人が共同投稿で祝った、お店の再開",a:"うどん屋仁",d:"2026年11月5日",url:"https://www.instagram.com/udonya_jin/reel/DfWu3jzzlnU/",v:"6.9万",l:"非表示",lr:"—",fr:"9倍",
-   why:["火事から9か月、店舗営業の再開を、地元のインスタグラマーが共同投稿で紹介した。","店主が両手を広げて笑う姿に「遂に店舗営業再開!」のテロップ。","キャプションは、火事からキッチンカー営業を経て再開するまでの道のりを紹介している。投稿4日目でまだ伸びている途中。"],tags:["共同投稿","物語"]},
-  {cls:"",t:"袋を持ってパンを買いに行く、ある日の買い物",a:"丘の上のパン屋",d:"2026年10月16日",url:"https://www.instagram.com/okanouenopanya/reel/Dei6Ez3BB81/",v:"2.9万",l:"158",lr:"0.5%",fr:"0.5倍",
-   why:["個包装を減らす活動をしているアカウントとの共同投稿。お店の公式が投稿したものではない。","お客さんが自分の袋を持って来店する様子を撮っている。お店の考え方(籠やタッパーの持参をお願いしている)が伝わる。","このお店のリールは普段5千回前後なので、約5.5倍。"],tags:["共同投稿","お店の考え方"]},
-];
-const special={cls:"special",t:"「本日夕方、火事になってしまいました」",a:"うどん屋仁",d:"2026年2月1日",url:"https://www.instagram.com/udonya_jin/reel/DUNdKXgE7aq/",v:"342.4万",l:"7,145",lr:"0.2%",fr:"471倍",
-   why:["お店の火事の現場を撮った動画。今回調べた個人店で最大の再生数だが、狙って再現できるものではない。","コメントには励ましと同時に、「消防の人の横で撮影してSNSに上げるのは失礼」という批判も入っていた。","この後お店は「復活への道」として再建の様子を発信し続け、ボランティア募集の動画は10.3万回、再開の共同投稿は6.9万回に届いた。"],tags:[]};
-const flat={cls:"flat",t:"米粉パンランチのお休みのお知らせ(画像)",a:"平林食堂",d:"2026年9月22日",url:"https://www.instagram.com/hirabayashi_shokudo/reel/DdklzJHS7Lh/",v:"約700",l:"19",lr:"約3%",fr:"1.6倍",
-   why:["文字のお知らせと料理写真2枚を並べた、動きのない画像のリール。","フォロワーが少なくても、いつものリールは500回前後見られている。ただし、フォロワー以外の人が止まる理由がないので、それ以上は広がらない。","同じお知らせでも、料理を作る手元の動画に文字を重ねれば、届く範囲は変わるはず。"],tags:[]};
-const stat=(k,label,val,hl)=>`<div class="stat${hl?' hl':''}"><span>${label}</span><strong>${val}</strong></div>`;
-const card=r=>`<article class="reel ${r.cls}">
-  <div class="reel-head"><h3>${r.t}</h3><span class="meta">${r.a} · ${r.d}</span></div>
-  <div class="stats">${stat('v','再生',r.v)}${stat('fr','フォロワー比',r.fr,true)}${stat('l','いいね',r.l)}${stat('lr','いいね率',r.lr)}</div>
-  <ul class="why">${r.why.map(w=>`<li>${w}</li>`).join('')}</ul>
-  <div class="tags">${r.cls==='special'?'<span class="chip warn">再現できない例</span>':r.cls==='flat'?'<span class="chip flat">伸びない例</span>':r.tags.map(t=>`<span class="tag">${t}</span>`).join('')}<a href="${r.url}" target="_blank" rel="noopener" style="margin-left:auto;font-size:13px">投稿を見る</a></div>
-</article>`;
-document.getElementById('reels').innerHTML=reels.map(card).join('')+card(special)+card(flat);
-</script>
